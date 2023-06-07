@@ -9,7 +9,8 @@ ENV PATH="/home/user/.local/bin:${PATH}"
 
 WORKDIR /app
 ADD requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir --user -r requirements.txt
+ADD requirements_dev.txt /app/requirements_dev.txt
+RUN pip install --no-cache-dir --user -r requirements_dev.txt
 
 COPY --chown=user:user . /app
 
