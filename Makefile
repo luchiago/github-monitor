@@ -24,3 +24,6 @@ test-report: test-coverage
 
 test-html-report: test-coverage
 	docker-compose run --rm api coverage html
+
+test-front-end:
+	docker-compose run --rm webpack npm run test

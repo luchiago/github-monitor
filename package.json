@@ -4,18 +4,27 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --config webpack.config.js --watch",
-    "lint": "eslint assets"
+    "lint": "eslint assets",
+    "test": "jest --watchAll --coverage",
+    "test:no-coverage": "jest --watchAll",
+    "test:report": "jest --runInBand --silent --coverage --reporters=default --reporters=jest-html-reporter"
   },
   "homepage": "https://github.com/vintasoftware/github-monitor#readme",
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "axios": "^0.27.2",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
+    "babel-loader": "^8.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.9",
@@ -23,16 +32,24 @@
     "redux": "^4.2.1",
     "redux-form": "^8.3.10",
     "redux-thunk": "^2.4.2",
-    "webpack": "^4.46.0",
+    "webpack": "^5.86.0",
     "webpack-bundle-tracker": "^2.0.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^4.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.4.3",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "27.0.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "jest": "^27.0.0",
+    "jest-axe": "^7.0.1",
+    "redux-mock-store": "^1.5.4"
   }
 }
