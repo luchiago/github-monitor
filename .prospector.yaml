@@ -18,8 +18,10 @@ pylint:
   disable:
     - invalid-name
     - wrong-import-order
+    - too-few-public-methods
   options:
     max-line-length: 100
+    django-settings-module: githubmonitor.settings
 
 dodgy:
   run: true
@@ -28,6 +30,7 @@ ignore-paths:
   - node_modules
   - venv
   - env
+  - .db.
 
 ignore-patterns:
   - .+/migrations/.+
