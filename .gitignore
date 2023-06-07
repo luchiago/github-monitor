@@ -4,3 +4,5 @@
 node_modules
 webpack-stats.json
 assets/bundles/
+.coverage
+htmlcov/
