@@ -174,6 +174,8 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'common:home'
 LOGOUT_REDIRECT_URL = 'common:login'
 
+GITHUB_API_URL = 'https://api.github.com/'
+
 
 WEBPACK_LOADER = {
     'DEFAULT': {
