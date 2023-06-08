@@ -1,5 +1,5 @@
 from logging import getLogger
-from typing import Tuple
+from typing import Optional, Tuple
 from urllib.parse import urljoin
 
 import requests
@@ -22,10 +22,9 @@ def log_request(func) -> Tuple[bool, dict]:
 
     def wrap(*args, **kwargs):
         try:
-            url = [arg.url for arg in args][0]
-            logger.info("Requesting with %s", url)
-
             response = func(*args, **kwargs)
+
+            logger.info("Requesting with %s", response.url)
 
             if not response.ok:
                 response.raise_for_status()
@@ -41,17 +40,29 @@ class GithubClient:
     Service class for creating requests to Github API
     """
 
-    def __init__(self, access_token: str, path: str) -> None:
-        self.headers = {
-            'Accept': 'application/vnd.github+json',
-            'Authorization': f'Bearer {access_token}',
-        }
-        self.url = urljoin(settings.GITHUB_API_URL, path)
+    def _prepare_request(
+        self,
+        path: str,
+        access_token: Optional[str] = ''
+    ) -> Tuple[str, dict]:
+        headers = {'Accept': 'application/vnd.github+json'}
+        if access_token:
+            headers.update({'Authorization': f'Bearer {access_token}'})
+
+        url = urljoin(settings.GITHUB_API_URL, path)
+        return url, headers
 
     @log_request
-    def get(self) -> bool:
+    def get(
+        self,
+        path: str,
+        access_token: Optional[str] = '',
+        params: Optional[dict] = None,
+    ) -> bool:
+        url, headers = self._prepare_request(path, access_token)
         return requests.get(
-            self.url,
-            headers=self.headers,
+            url,
+            headers=headers,
             timeout=DEFAULT_TIMEOUT_SECONDS,
+            params=params
         )

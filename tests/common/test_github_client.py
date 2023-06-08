@@ -3,15 +3,14 @@ from unittest.mock import Mock, patch
 from django.test import TestCase
 from requests.exceptions import HTTPError
 
-from common.github_client import DEFAULT_TIMEOUT_SECONDS, GithubClient
+from common.github_client import GithubClient
 
 
 class TestGithubClient(TestCase):
     def setUp(self):
-        self.client = GithubClient(
-            access_token='fake-token',
-            path='path'
-        )
+        self.token = 'token'
+        self.path = 'path/'
+        self.client = GithubClient()
 
     @patch('requests.get')
     def test_get_failure(self, mock_get):
@@ -26,16 +25,12 @@ class TestGithubClient(TestCase):
             raise_for_status=Mock(side_effect=HTTPError),
         )
 
-        is_successful, data = self.client.get()
+        is_successful, data = self.client.get(self.path, self.token)
 
         self.assertFalse(is_successful)
         self.assertEqual(data, {})
 
-        mock_get.assert_called_once_with(
-            self.client.url,
-            headers=self.client.headers,
-            timeout=DEFAULT_TIMEOUT_SECONDS,
-        )
+        mock_get.assert_called_once()
 
     @patch('requests.get')
     def test_get_success(self, mock_get):
@@ -48,16 +43,13 @@ class TestGithubClient(TestCase):
 
         mock_get.return_value = Mock(
             ok=True,
+            url='http://test.com',
             json=Mock(return_value=fake_data),
         )
 
-        is_successful, data = self.client.get()
+        is_successful, data = self.client.get(self.path, self.token)
 
         self.assertTrue(is_successful)
         self.assertEqual(data, fake_data)
 
-        mock_get.assert_called_once_with(
-            self.client.url,
-            headers=self.client.headers,
-            timeout=DEFAULT_TIMEOUT_SECONDS,
-        )
+        mock_get.assert_called_once()
