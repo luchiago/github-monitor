@@ -1,20 +1,45 @@
 import axios from 'axios';
-import {reset} from 'redux-form';
+import { reset } from 'redux-form';
 import store from '../store';
 import {
-  createRepositorySuccess, getCommitsSuccess,
+  createRepositorySuccess,
+  createRepositoryFailure,
+  getCommitsSuccess,
 } from '../actions/CommitActions';
 
-export const getCommits = () => axios.get(`/api/commits/`)
-  .then((response) => {
-    store.dispatch(getCommitsSuccess({...response.data}));
-  });
+export const getCommits = async () => {
+  const response = await axios.get('/api/commits/');
+  store.dispatch(getCommitsSuccess({ ...response.data }));
+};
 
-export const createRepository = (values, headers, formDispatch) => axios.post('/api/repositories/', values, {headers})
-  .then((response) => {
+export const createRepository = async (values, headers, formDispatch) => {
+  try {
+    const response = await axios.post('/api/repositories/', values, { headers });
     store.dispatch(createRepositorySuccess(response.data, true));
     formDispatch(reset('repoCreate'));
-  }).catch((error) => {
-    const err = error.response;
-    console.log(err);
-  });
+  } catch (error) {
+    const errorData = error.response.data;
+    const errorMsg = [];
+
+    switch (error.response.status) {
+      case 400: {
+        // Validation Error
+        const fieldNames = Object.keys(errorData);
+        fieldNames.forEach((field) => {
+          const message = errorData[field][0];
+          const capitalized = message.charAt(0).toUpperCase() + message.slice(1);
+          errorMsg.push(`${capitalized}`);
+        });
+        break;
+      }
+      case 404:
+        // Not Found Repository
+        errorMsg.push(`${errorData.message}`);
+        break;
+      default:
+        errorMsg.push('Generic error');
+    }
+    store.dispatch(createRepositoryFailure(errorMsg, false));
+    formDispatch(reset('repoCreate'));
+  }
+};
