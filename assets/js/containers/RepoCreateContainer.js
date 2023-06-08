@@ -8,24 +8,22 @@ class RepoCreateContainer extends React.Component {
   submit = (values, dispatch) => {
     const token = document.getElementById('main').dataset.csrftoken;
     const name = values.name.split('/')[1];
-    const v = { ...values, name };
-    return commitAPI.createRepository(v, { 'X-CSRFToken': token }, dispatch);
+    const v = {...values, name};
+    return commitAPI.createRepository(v, {'X-CSRFToken': token}, dispatch);
   };
 
   render() {
-    const { successMessage, errorMsg } = this.props;
-    return <Form onSubmit={this.submit} successMessage={successMessage} errorMsg={errorMsg} />;
+    const { successMessage } = this.props;
+    return <Form onSubmit={this.submit} successMessage={successMessage} />;
   }
 }
 
 RepoCreateContainer.propTypes = {
   successMessage: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string,
 };
 
-const mapStateToProps = (store) => ({
+const mapStateToProps = store => ({
   successMessage: store.commitState.successMessage,
-  errorMsg: store.commitState.errorMsg,
 });
 
 export default connect(mapStateToProps)(RepoCreateContainer);

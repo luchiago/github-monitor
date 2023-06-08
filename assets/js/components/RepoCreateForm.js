@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Field, reduxForm} from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
+import Alert from './Alert';
 
 const renderField = ({
-  input, placeholder, className, type, meta: {touched, error, invalid},
+  input, placeholder, className, type, meta: { touched, error, invalid },
 }) => (
-    <div>
-      <input
-        {...input}
-        placeholder={placeholder}
-        className={`${className} ${touched && invalid ? 'is-invalid' : ''}`}
-        type={type}
-      />
-      {touched
-        && ((error && (
-          <div className="invalid-feedback">
-            {error}
-          </div>
-        )))
-      }
-    </div>
-  );
+  <div>
+    <input
+      {...input}
+      placeholder={placeholder}
+      className={`${className} ${touched && invalid ? 'is-invalid' : ''}`}
+      type={type}
+    />
+    {touched
+      && ((error && (
+        <div className="invalid-feedback">
+          {error}
+        </div>
+      )))}
+  </div>
+);
 
 renderField.propTypes = {
   input: PropTypes.object.isRequired,
@@ -32,16 +32,16 @@ renderField.propTypes = {
 
 const RepoCreateForm = (props) => {
   const {
-    successMessage, handleSubmit, pristine, submitting,
+    successMessage, handleSubmit, pristine, submitting, errorMsg,
   } = props;
   return (
-    <div>
-      {successMessage
-        && (
-          <div className="alert alert-success" role="alert">
-            Repository added successfully!
-          </div>
-        )}
+    <div id="create-form">
+      {successMessage && (
+        <Alert alertTypeClass="alert-success" message={['Repository added successfully']} />
+      )}
+      {!!errorMsg && (
+        <Alert alertTypeClass="alert-danger" message={errorMsg} />
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="col-10">
@@ -69,10 +69,11 @@ RepoCreateForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   successMessage: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string,
 };
 
 const validate = (values) => {
-  const {username} = document.getElementById('main').dataset;
+  const { username } = document.getElementById('main').dataset;
   const errors = {};
   if (!values.name || !values.name.startsWith(`${username}/`)) {
     errors.name = `Repository must belong to you (eg: ${username}/repo-name)`;
