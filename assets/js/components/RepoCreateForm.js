@@ -69,7 +69,7 @@ RepoCreateForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   successMessage: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string,
+  errorMsg: PropTypes.array,
 };
 
 const validate = (values) => {

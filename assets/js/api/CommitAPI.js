@@ -9,7 +9,8 @@ import {
 
 export const getCommits = async () => {
   const response = await axios.get('/api/commits/');
-  store.dispatch(getCommitsSuccess({ ...response.data }));
+  const { results } = response.data;
+  store.dispatch(getCommitsSuccess({ commits: results }));
 };
 
 export const createRepository = async (values, headers, formDispatch) => {
