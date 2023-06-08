@@ -26,9 +26,8 @@ class RepositoryView(APIView):
         search_service = RepositorySearch(name=repository_name, user=request.user)
         found = search_service.search()
         if found:
-            serializer = self.serializer_class(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            repository = search_service.create_repository()
+            search_service.fetch_commits(repository)
             return Response(status=status.HTTP_201_CREATED)
         return Response(
             data={
