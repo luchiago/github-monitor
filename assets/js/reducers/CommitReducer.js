@@ -3,7 +3,7 @@ import * as types from '../actions/ActionTypes';
 const initialState = {
   commits: [],
   successMessage: false,
-  errorMsg: '',
+  errorMsg: [],
 };
 
 const commitReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const commitReducer = (state = initialState, action) => {
     case types.GET_COMMITS_SUCCESS:
       return {
         ...state,
-        commits: Object.values(action.payload),
+        commits: action.payload.commits,
       };
     case types.CREATE_REPOSITORY_SUCCESS: {
       return {
