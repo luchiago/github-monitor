@@ -12,6 +12,7 @@ from .serializers import CommitSerializer, RepositorySerializer
 class CommitView(ListAPIView):
     serializer_class = CommitSerializer
     permission_classes = [IsAuthenticated]
+    filterset_fields = ('author', 'repository__name')
     queryset = Commit.objects.all()
 
 
