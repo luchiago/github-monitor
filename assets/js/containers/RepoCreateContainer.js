@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as commitAPI from '../api/CommitAPI';
 import Form from '../components/RepoCreateForm';
 
@@ -14,7 +14,7 @@ class RepoCreateContainer extends React.Component {
 
   render() {
     const { successMessage, errorMsg } = this.props;
-    return <Form onSubmit={this.submit} successMessage={successMessage} errorMsg={errorMsg}/>;
+    return <Form onSubmit={this.submit} successMessage={successMessage} errorMsg={errorMsg} />;
   }
 }
 

@@ -7,6 +7,7 @@ const initialState = {
   page: 1,
   nextPage: null,
   previousPage: null,
+  repositories: [],
 };
 
 const commitReducer = (state = initialState, action) => {
@@ -30,6 +31,12 @@ const commitReducer = (state = initialState, action) => {
         ...state,
         successMessage: action.payload.successMessage,
         errorMsg: action.payload.errorMsg,
+      };
+    }
+    case types.GET_REPOSITORIES_SUCCESS: {
+      return {
+        ...state,
+        repositories: action.payload.repositories,
       };
     }
     default:

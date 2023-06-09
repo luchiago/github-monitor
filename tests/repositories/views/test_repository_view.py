@@ -21,7 +21,7 @@ class RepositoryViewTest(APITestCase):
         self.user = UserSocialAuthFactory().user
 
         self.client.force_authenticate(user=self.user)
-        self.url = reverse('repositories:repositories-create')
+        self.url = reverse('repositories:repositories-list-create')
 
     @patch('repositories.repository_search.RepositorySearch.search', return_value=False)
     def test_create_repository_fail(self, mock_search):
@@ -121,6 +121,32 @@ class RepositoryViewTest(APITestCase):
         mock_search.assert_called_once()
         mock_fetch_commits.assert_called_once_with(repository)
 
+    def test_list_all_repositories_empty(self):
+        """
+        GIVEN: no repositories on the db
+        THEN: return an empty list
+        """
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json().get('result'), [])
+
+    def test_list_all_repositories(self):
+        """
+        GIVEN: repositories on the db
+        THEN: return repositories names
+        """
+        RepositoryFactory.create_batch(5)
+        expected_response = Repository.objects.only(
+            'name'
+        ).all().values_list('name', flat=True)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json().get('result'), list(expected_response))
+
 
 class RepositoryViewIntegrationTest(APITestCase):
     def setUp(self):
@@ -129,7 +155,7 @@ class RepositoryViewIntegrationTest(APITestCase):
         self.fake_data = {'data': 'fake'}
 
         self.client.force_authenticate(user=self.user)
-        self.url = reverse('repositories:repositories-create')
+        self.url = reverse('repositories:repositories-list-create')
 
     @patch('requests.get')
     def test_create_repository_fail(self, mock_get):

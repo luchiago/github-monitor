@@ -4,8 +4,15 @@ import store from '../store';
 import {
   createRepositorySuccess,
   createRepositoryFailure,
+  getRepositoriesSuccess,
   getCommitsSuccess,
 } from '../actions/CommitActions';
+
+export const getRepositories = async (url = '/api/repositories/') => {
+  const response = await axios.get(url);
+  const repositories = response.data.result;
+  store.dispatch(getRepositoriesSuccess(repositories));
+};
 
 export const getCommits = async (url = '/api/commits/') => {
   const response = await axios.get(url);

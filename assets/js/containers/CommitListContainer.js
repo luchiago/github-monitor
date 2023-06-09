@@ -7,6 +7,7 @@ import CommitList from '../components/CommitList';
 class CommitListContainer extends React.Component {
   componentDidMount() {
     commitAPI.getCommits();
+    commitAPI.getRepositories();
   }
 
   render() {

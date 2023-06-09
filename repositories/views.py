@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Commit
+from .models import Commit, Repository
 from .repository_search import RepositorySearch
-from .serializers import CommitSerializer, RepositorySerializer
+from .serializers import CommitSerializer
 
 
 class CommitView(ListAPIView):
@@ -17,8 +17,14 @@ class CommitView(ListAPIView):
 
 
 class RepositoryView(APIView):
-    serializer_class = RepositorySerializer
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        repositories_names = Repository.objects.only(
+            'name'
+        ).all().values_list('name', flat=True)
+
+        return Response(data={'result': repositories_names}, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         repository_name = request.data.get('name')
