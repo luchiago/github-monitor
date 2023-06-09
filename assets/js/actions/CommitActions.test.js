@@ -28,10 +28,12 @@ test('createRepositoryFailure returns type and payload with errorMsg and success
 });
 
 test('getCommitsSuccess returns type and payload with commits', () => {
-  const commits = [];
+  const commits = Object.keys([]);
+  const next = null;
+  const previous = null;
 
-  const result = actions.getCommitsSuccess(commits);
+  const result = actions.getCommitsSuccess(commits, next, previous);
 
   expect(result.type).toBe(types.GET_COMMITS_SUCCESS);
-  expect(result.payload).toBe(commits);
+  expect(result.payload).toStrictEqual({ commits, next, previous });
 });

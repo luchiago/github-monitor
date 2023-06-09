@@ -12,15 +12,20 @@ jest.mock('axios');
 
 describe('getCommits', () => {
   test('retrieve commits and dispatch them', async () => {
-    const mockResponse = { data: { results: [1, 2, 3] } };
+    const mockResponse = {
+      data: {
+        results: [1, 2, 3],
+        previous: null,
+        next: null,
+      },
+    };
+    const { results: commits, next, previous } = mockResponse.data;
     axios.get.mockResolvedValue(mockResponse);
     const dispatchSpy = jest.spyOn(store, 'dispatch');
 
     await getCommits();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(getCommitsSuccess(
-      { commits: mockResponse.data.results },
-    ));
+    expect(dispatchSpy).toHaveBeenCalledWith(getCommitsSuccess(commits, next, previous));
   });
 });
 
