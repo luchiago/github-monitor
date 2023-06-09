@@ -10,7 +10,7 @@ export const createRepositoryFailure = (errorMsg, successMessage) => ({
   payload: { errorMsg, successMessage },
 });
 
-export const getCommitsSuccess = (commits) => ({
+export const getCommitsSuccess = (commits, next, previous) => ({
   type: types.GET_COMMITS_SUCCESS,
-  payload: commits,
+  payload: { commits, next, previous },
 });

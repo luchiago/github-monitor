@@ -7,10 +7,19 @@ import {
   getCommitsSuccess,
 } from '../actions/CommitActions';
 
-export const getCommits = async () => {
-  const response = await axios.get('/api/commits/');
-  const { results } = response.data;
-  store.dispatch(getCommitsSuccess({ commits: results }));
+export const getCommits = async (url = '/api/commits/') => {
+  const response = await axios.get(url);
+  const { results: commits, next, previous } = response.data;
+  store.dispatch(getCommitsSuccess(commits, next, previous));
+};
+
+export const filterCommits = (query) => {
+  let url = '/api/commits/';
+  if (query && query.length > 0) {
+    url += `?${query}`;
+  }
+
+  getCommits(url);
 };
 
 export const createRepository = async (values, headers, formDispatch) => {

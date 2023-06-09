@@ -126,3 +126,8 @@ body {
     margin-right: 0;
   }
 }
+
+.button-link {
+    font-size: 12.5px;
+    padding: unset;
+}

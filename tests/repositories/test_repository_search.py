@@ -13,7 +13,7 @@ from repositories.models import Commit, Repository
 from repositories.repository_search import (REPO_PATH, FetchRepositoryCommits,
                                             RepositorySearch)
 
-fake = Faker
+fake = Faker()
 
 
 class TestRepositorySearch(TestCase):
