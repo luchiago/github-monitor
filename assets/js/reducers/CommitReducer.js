@@ -4,6 +4,9 @@ const initialState = {
   commits: [],
   successMessage: false,
   errorMsg: [],
+  page: 1,
+  nextPage: null,
+  previousPage: null,
 };
 
 const commitReducer = (state = initialState, action) => {
@@ -12,6 +15,8 @@ const commitReducer = (state = initialState, action) => {
       return {
         ...state,
         commits: action.payload.commits,
+        nextPage: action.payload.next,
+        previousPage: action.payload.previous,
       };
     case types.CREATE_REPOSITORY_SUCCESS: {
       return {

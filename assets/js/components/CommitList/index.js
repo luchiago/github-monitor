@@ -1,8 +1,60 @@
 import React from 'react';
+import { ArrowLeftSquareFill, ArrowRightSquareFill } from 'react-bootstrap-icons';
 import PropTypes from 'prop-types';
+import validator from 'validator';
+import { filterCommits, getCommits } from '../../api/CommitAPI';
+
+const NavButton = ({ disabled, onClick, action }) => (
+  <>
+    <button
+      type="button"
+      className="page-item btn-secondary"
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {action === 'previous' ? <ArrowLeftSquareFill /> : <ArrowRightSquareFill />}
+    </button>
+  </>
+);
+
+const Pagination = ({ previousPage, nextPage }) => {
+  const previousAction = (page) => {
+    getCommits(page);
+  };
+
+  const nextAction = (page) => {
+    getCommits(page);
+  };
+
+  return (
+    <>
+      <div className="pagination pagination-sm m-2">
+        <NavButton
+          disabled={previousPage === null}
+          onClick={() => previousAction(previousPage)}
+          action="previous"
+        />
+        <NavButton
+          disabled={nextPage === null}
+          onClick={() => nextAction(nextPage)}
+          action="next"
+        />
+      </div>
+    </>
+  );
+};
 
 const CommitList = (props) => {
-  const { commits } = props;
+  const handleSearch = (query, type) => {
+    const sanitizedInput = validator.escape(query);
+    const searchParams = new URLSearchParams();
+    searchParams.append(type, sanitizedInput);
+
+    filterCommits(searchParams.toString());
+  };
+
+  const { commits, previousPage, nextPage } = props;
+
   return (
     <div>
       {commits.length !== 0 && (
@@ -11,7 +63,7 @@ const CommitList = (props) => {
             <div className="card-header">
               Commit List
             </div>
-
+            <Pagination previousPage={previousPage} nextPage={nextPage} />
             <div className="card-body">
               {commits.map((commit, index) => (
                 <div key={commit.sha}>
@@ -23,13 +75,17 @@ const CommitList = (props) => {
                       {commit.message}
                     </p>
                     <small className="text-muted">
-                      {commit.author}
+                      <button className="btn btn-link button-link" type="reset" onClick={() => handleSearch(commit.author, 'author')}>
+                        {commit.author}
+                      </button>
                       {' '}
                       authored
                       {' '}
                       on
                       {' '}
-                      {commit.repository}
+                      <button className="btn btn-link button-link" type="reset" onClick={() => handleSearch(commit.repository, 'repository')}>
+                        {commit.repository}
+                      </button>
                       {' '}
                       at
                       {' '}
@@ -49,6 +105,8 @@ const CommitList = (props) => {
 
 CommitList.propTypes = {
   commits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  previousPage: PropTypes.string,
+  nextPage: PropTypes.string,
 };
 
 export default CommitList;
